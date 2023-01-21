@@ -22,10 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -282,6 +279,22 @@ public class AgilityAbilities extends AbilityProvider implements Listener {
                         livingEntity.damage(thunderFallDamage, player);
                     }
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void elytraListener(EntityToggleGlideEvent event) {
+        if (!event.isCancelled()) {
+            if (OptionL.isEnabled(Skills.AGILITY)) {
+                Player player = (Player) event.getEntity();
+                if (blockAbility(player)) return;
+                PlayerData playerData = plugin.getPlayerManager().getPlayerData(player);
+                if (playerData == null) return;
+                if (playerData.getSkillLevel(Skills.AGILITY) <= 20) {
+                    event.setCancelled(true);
+                }
+
             }
         }
     }
